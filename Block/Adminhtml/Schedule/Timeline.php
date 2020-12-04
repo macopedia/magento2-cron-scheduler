@@ -84,8 +84,8 @@ class Timeline extends \Magento\Backend\Block\Template
         $schedules->getSelect()->order('job_code');
 
         foreach ($schedules as $schedule) {
-            $start = $this->timezone->date($schedule->getData('executed_at'))->format('Y-m-d H:i:s');
-            $end = $this->timezone->date($schedule->getData('finished_at'))->format('Y-m-d H:i:s');
+            $start = $this->timezone->scopeDate(null, $schedule->getData('executed_at'), true)->format('Y-m-d H:i:s');
+            $end = $this->timezone->scopeDate(null, $schedule->getData('finished_at'), true)->format('Y-m-d H:i:s');
             $status = $schedule->getStatus();
 
             if ($start == null) {
