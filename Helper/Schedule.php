@@ -140,9 +140,10 @@ class Schedule extends \Magento\Framework\App\Helper\AbstractHelper
         } else {
             $currentTime = (int)$this->datetime->date('U') + $this->datetime->getGmtOffset('hours') * 60 * 60;
         }
-        $lastCronStatus = strtotime($this->scheduleCollectionFactory->create()->getLastCronStatus());
+
+        $lastCronStatus = $this->scheduleCollectionFactory->create()->getLastCronStatus();
         if ($lastCronStatus != null) {
-            $diff = floor(($currentTime - $lastCronStatus) / 60);
+            $diff = floor(($currentTime - strtotime($lastCronStatus)) / 60);
             if ($diff > 5) {
                 if ($diff >= 60) {
                     $diff = floor($diff / 60);

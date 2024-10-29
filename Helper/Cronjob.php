@@ -237,7 +237,7 @@ class Cronjob extends \Magento\Framework\App\Helper\AbstractHelper
         $method   = $data['method'];
         $result = false;
         foreach (array_values($jobData) as $job) {
-            if ($job['instance']==$instance && $job['method']==$method) {
+            if (isset($job['instance'], $job['method']) && $job['instance']==$instance && $job['method']==$method) {
                 if (isset($job['schedule']) && $job['schedule'] == $cronExpr) {
                     $result = true;
                     break;
