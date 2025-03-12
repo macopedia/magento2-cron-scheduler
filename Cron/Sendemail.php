@@ -12,13 +12,13 @@
  * @license    https://kiwicommerce.co.uk/magento2-extension-license/
  */
 
-namespace KiwiCommerce\CronScheduler\Controller\Adminhtml\Cron;
+namespace KiwiCommerce\CronScheduler\Cron;
 
 /**
  * Class Sendemail
  * @package KiwiCommerce\CronScheduler\Controller\Adminhtml\Cron
  */
-class Sendemail extends \Magento\Backend\App\Action
+class Sendemail
 {
     /**
      * Recipient email config path
@@ -82,7 +82,6 @@ class Sendemail extends \Magento\Backend\App\Action
 
     /**
      * Class constructor.
-     * @param \Magento\Backend\App\Action\Context $context
      * @param \KiwiCommerce\CronScheduler\Model\ResourceModel\Schedule\CollectionFactory $scheduleCollectionFactory
      * @param \Magento\Framework\Mail\Template\TransportBuilder $transportBuilder
      * @param \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation
@@ -93,7 +92,6 @@ class Sendemail extends \Magento\Backend\App\Action
      * @param \Psr\Log\LoggerInterface $logger
      */
     public function __construct(
-        \Magento\Backend\App\Action\Context $context,
         \KiwiCommerce\CronScheduler\Model\ResourceModel\Schedule\CollectionFactory $scheduleCollectionFactory,
         \Magento\Framework\Mail\Template\TransportBuilder $transportBuilder,
         \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation,
@@ -103,7 +101,6 @@ class Sendemail extends \Magento\Backend\App\Action
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Psr\Log\LoggerInterface $logger
     ) {
-        parent::__construct($context);
         $this->scheduleCollectionFactory = $scheduleCollectionFactory;
         $this->transportBuilder = $transportBuilder;
         $this->inlineTranslation = $inlineTranslation;

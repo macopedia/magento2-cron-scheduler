@@ -12,13 +12,13 @@
  * @license    https://kiwicommerce.co.uk/magento2-extension-license/
  */
 
-namespace KiwiCommerce\CronScheduler\Controller\Adminhtml\Cron;
+namespace KiwiCommerce\CronScheduler\Cron;
 
 /**
  * Class LongJobChecker
  * @package KiwiCommerce\CronScheduler\Controller\Adminhtml\Cron
  */
-class LongJobChecker extends \Magento\Backend\App\Action
+class LongJobChecker
 {
     /**
      * @var \KiwiCommerce\CronScheduler\Model\ResourceModel\Schedule\CollectionFactory
@@ -42,18 +42,15 @@ class LongJobChecker extends \Magento\Backend\App\Action
 
     /**
      * Class constructor.
-     * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\Stdlib\DateTime\DateTime $dateTime
      * @param \KiwiCommerce\CronScheduler\Model\ResourceModel\Schedule\CollectionFactory $scheduleCollectionFactory
      */
     public function __construct(
-        \Magento\Backend\App\Action\Context $context,
         \Magento\Framework\Stdlib\DateTime\DateTime $dateTime,
         \KiwiCommerce\CronScheduler\Model\ResourceModel\Schedule\CollectionFactory $scheduleCollectionFactory
     ) {
         $this->dateTime = $dateTime;
         $this->scheduleCollectionFactory = $scheduleCollectionFactory;
-        parent::__construct($context);
     }
 
     /**
@@ -62,7 +59,7 @@ class LongJobChecker extends \Magento\Backend\App\Action
     public function execute()
     {
         $collection = $this->scheduleCollectionFactory->create();
-        $time = strftime('%Y-%m-%d %H:%M:%S', $this->dateTime->gmtTimestamp($this->timePeriod));
+        $time = date('Y-m-d H:i:s', $this->dateTime->gmtTimestamp($this->timePeriod));
 
         $jobs = $collection->addFieldToFilter('status', \Magento\Cron\Model\Schedule::STATUS_RUNNING)
             ->addFieldToFilter(
@@ -79,7 +76,7 @@ class LongJobChecker extends \Magento\Backend\App\Action
         foreach ($jobs as $job) {
             $pid = $job->getPid();
 
-            $finished_at = strftime('%Y-%m-%d %H:%M:%S', $this->dateTime->gmtTimestamp());
+            $finished_at = date('Y-m-d H:i:s', $this->dateTime->gmtTimestamp());
             if (function_exists('posix_getsid') && posix_getsid($pid) === false) {
                 $job->setData('status', \Magento\Cron\Model\Schedule::STATUS_ERROR);
                 $job->setData('messages', __('Execution stopped due to some error.'));
